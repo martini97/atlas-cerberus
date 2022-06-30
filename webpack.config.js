@@ -9,7 +9,22 @@ module.exports = (webpackConfigEnv, argv) => {
     argv,
   });
 
+  const webSocketHost = process.env.WEBPACK_WEBSOCKET_HOST || "localhost";
+  const webSocketPort = process.env.WEBPACK_WEBSOCKET_PORT || undefined;
+  const webSocketProtocol = process.env.WEBPACK_WEBSOCKET_PROTOCOL || "ws";
+
   return merge(defaultConfig, {
-    // modify the webpack config however you'd like to by adding to this object
+    devServer: {
+      ...defaultConfig.devServer,
+      open: false,
+      hot: true,
+      client: {
+        webSocketURL: {
+          hostname: webSocketHost,
+          port: webSocketPort,
+          protocol: webSocketProtocol,
+        },
+      },
+    },
   });
 };
